@@ -1,0 +1,197 @@
+Dilly - The Daily Dilly Tracker
+
+# Dilly – Design Document
+
+## 1. Overview
+
+**Dilly** is a lightweight, fully client-side daily task/habit tracker web application.  
+The user defines a reusable daily template consisting of ordered, categorized items. Each day, the app loads a working copy of that template. The user marks items as done/undone, reorders pending items via drag-and-drop, and tracks progress. All data persists in the browser via `localStorage`. No backend, no frameworks, pure HTML/CSS/JS.
+
+Core philosophy: Minimalist, fast, “hacker” aesthetic, instantly usable.
+
+## 2. Data Model
+
+All data is stored in `localStorage` under the key `"dilly-data"`. The value is a JSON string of the following structure:
+
+```json
+{
+  "template": [
+    {
+      "id": "unique-string-id",
+      "title": "Morning run",
+      "category": "Fitness",
+      "order": 0
+    },
+    ...
+  ],
+  "categories": [
+    { "name": "Fitness", "emoji": "💪" },
+    { "name": "Health",  "emoji": "🍎" },
+    { "name": "Work",    "emoji": "💻" },
+    { "name": "Chore",   "emoji": "🧹" },
+    { "name": "Social",  "emoji": "👥" },
+    { "name": "Reading", "emoji": "📚" }   // custom example
+  ],
+  "currentDay": {
+    "dateString": "2025-12-29",          // YYYY-MM-DD, set on manual reset
+    "pending": [ "id1", "id3", "id2" ], // array of template item IDs in current order
+    "done": {
+      "id1": "2025-12-29T14:32:10Z",     // ISO timestamp when marked done
+      "id4": "2025-12-29T09:15:22Z"
+    }
+  },
+  "settings": {
+    "theme": "hacker" // or "plain"
+  }
+}
+```
+
+- Item IDs are short UUIDs generated with `crypto.randomUUID()` (or a simple timestamp fallback).
+- `currentDay.pending` holds only IDs to keep the structure lightweight.
+- Done items keep their timestamp for display but are never removed unless the day is reset.
+
+## 3. Categories
+
+- 5 seeded categories with default emojis:
+  - Fitness 💪
+  - Health 🍎
+  - Work 💻
+  - Chore 🧹
+  - Social 👥
+- User can add up to 5 custom categories (name + emoji).
+- Total maximum: 10 categories.
+- Stored in the top-level `categories` array.
+
+## 4. Views & Navigation
+
+The app has two main modes, toggled via simple buttons in a fixed header:
+
+1. **Daily View** (default on load)
+2. **Edit Template View**
+
+Header always visible:
+```
+[ Dilly ]   [ Today ]  [ Edit Template ]   [ Reset Day ]   [ Theme: Hacker ▼ ]
+```
+
+### 4.1 Daily View
+
+- **Scorecard** (top section)
+  - “X / Y completed” (e.g., 4 / 12)
+  - Percentage (e.g., 33%)
+  - Simple text + optional thin progress bar (CSS only)
+
+- **Pending Items** section
+  - Title: “To Do”
+  - List of draggable cards (HTML5 Drag and Drop API)
+  - Each card:
+    - Left: category emoji (large)
+    - Center: item title
+    - Right: “Done” button
+    - Drag handle (≡ or ⋮⋮)
+
+- **Done Items** section (below pending)
+  - Title: “Done”
+  - Similar cards but slightly grayed/opacity reduced
+    - “Undo” button
+    - Small timestamp underneath (e.g., “14:32” or relative “2h ago”)
+
+### 4.2 Edit Template View
+
+- List of all template items in current order
+- Each row:
+  - Drag handle
+  - Category dropdown (shows emoji + name)
+  - Text input for title
+  - Delete button (trash icon)
+- Bottom controls:
+  - “+ Add Item” button
+  - “Manage Categories” button → opens modal
+  - “Back to Today” button
+
+### 4.3 Manage Categories Modal
+
+- Lists all current categories
+- Pre-seeded ones cannot be deleted, only emoji changed
+- Custom ones can be edited or deleted
+- “+ Add Custom Category” (max 5)
+
+## 5. Daily Reset Behavior
+
+- Manual only via “Reset Day” button in header
+- On reset:
+  - Prompt confirmation
+  - Set `currentDay.dateString` to today’s YYYY-MM-DD
+  - Set `currentDay.pending` to the full list of template item IDs in template order
+  - Clear `currentDay.done`
+- No automatic midnight reset (especially useful during development)
+
+## 6. Template Edit Impact on Current Day
+
+When saving changes to the template:
+
+- Completed items (`currentDay.done`) remain untouched
+- Pending list is updated as follows:
+  - Items removed from template → removed from pending
+  - Items added to template → appended to end of pending (preserving existing order)
+  - Order changes → pending list reordered to match new template order
+  - Title or category changes → reflected immediately in pending cards
+
+## 7. Drag-and-Drop Reordering
+
+- Implemented with native HTML5 Drag and Drop
+- Only allowed within the pending list in Daily View
+- In Edit Template View, drag reorders the master template (affects future resets and current pending)
+
+## 8. Theming
+
+Two user-selectable themes (stored in settings):
+
+- **Hacker** (default)
+  - Black/dark gray background
+  - Bright green/monochrome text (#0f0 style)
+  - Monospace font (e.g., 'Courier New', 'Fira Code', fallback system)
+  - Subtle scanline or terminal cursor effects optional
+
+- **Plain**
+  - White/light gray background
+  - Dark text
+  - Sans-serif font (system default)
+
+Toggle via dropdown in header. Pure CSS classes swapped on `<body>`.
+
+## 9. Technical Constraints & Choices
+
+- No external libraries or frameworks
+- Vanilla JavaScript (ES6+)
+- HTML5 + CSS3 only
+- Icons: Unicode emojis only (no external assets)
+- Drag-and-drop: Native HTML5 API
+- Persistence: `localStorage` only
+- No mobile-specific optimizations for v1
+- No sync between devices (localStorage is per-browser)
+
+## 10. File Structure (Suggested)
+
+```
+index.html
+css/
+  style.css
+  themes.css
+js/
+  main.js          // app init, routing, event binding
+  storage.js       // load/save helpers
+  render.js        // DOM builders for lists/cards
+  dragdrop.js      // reorder logic
+  template.js      // edit view logic
+  utils.js         // ID gen, date formatting, etc.
+```
+
+## 11. Future Considerations (out of scope for v1)
+
+- Export/import JSON for manual backup/sync
+- IndexedDB for larger history if daily archiving added later
+- PWA manifest for installable feel
+- Keyboard shortcuts (hacker vibe)
+
+This design keeps Dilly fast, private, and fully controllable by the user while delivering the exact daily tracking experience requested. Ready to implement in pure JS.

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dilly - Daily Task Tracker</title>
+  <link rel="icon" type="image/x-icon" href="resources/dilly.ico">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/themes.css">
+</head>
+<body class="theme-hacker">
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">Dilly</div>
+    <button id="daily-btn">Today</button>
+    <button id="template-btn">Edit Template</button>
+    <button id="reset-btn">Reset Day</button>
+    <select id="theme-select">
+      <option value="hacker">Theme: Hacker</option>
+      <option value="plain">Theme: Plain</option>
+    </select>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Daily View -->
+    <div id="daily-view" class="view active">
+      <!-- Scorecard -->
+      <div id="scorecard" class="scorecard">
+        <div class="score">0 / 0 completed</div>
+        <div class="percentage">0%</div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Pending Items -->
+      <h2 class="section-title">To Do</h2>
+      <div id="pending-items">
+        <div class="item-list empty">Loading...</div>
+      </div>
+
+      <!-- Done Items -->
+      <h2 class="section-title">Done</h2>
+      <div id="done-items">
+        <div class="item-list empty">No completed items yet</div>
+      </div>
+    </div>
+
+    <!-- Edit Template View -->
+    <div id="template-view" class="view">
+      <h2 class="section-title">Edit Template</h2>
+      <div id="template-items">
+        <div class="item-list empty">Loading...</div>
+      </div>
+
+      <div class="template-controls">
+        <button id="add-item-btn">+ Add Item</button>
+        <button id="manage-categories-btn">Manage Categories</button>
+        <button id="back-to-today-btn">← Back to Today</button>
+      </div>
+
+      <div class="template-image">
+        <img src="resources/dilly.jpg" alt="Dilly">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Manage Categories Modal -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div id="categories-modal" class="modal">
+      <button id="close-modal-btn" class="close-btn">✕</button>
+      <h2>Manage Categories</h2>
+
+      <div id="category-list" class="category-list">
+        <!-- Categories will be rendered here -->
+      </div>
+
+      <div class="modal-actions">
+        <button id="add-category-btn">+ Add Custom Category</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/dragdrop.js"></script>
+  <script src="js/template.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

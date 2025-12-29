@@ -1,0 +1,120 @@
+/* Dilly Themes */
+
+/* Hacker Theme (default) */
+body.theme-hacker {
+  background-color: #0a0a0a;
+  color: #00ff00;
+  font-family: 'Courier New', 'Fira Code', 'Consolas', monospace;
+}
+
+body.theme-hacker .header {
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #00ff00;
+}
+
+body.theme-hacker button {
+  background-color: #1a1a1a;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+}
+
+body.theme-hacker button:hover {
+  background-color: #00ff00;
+  color: #0a0a0a;
+}
+
+body.theme-hacker .card {
+  background-color: #1a1a1a;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+}
+
+body.theme-hacker .card.done {
+  opacity: 0.5;
+  border-color: #006600;
+}
+
+body.theme-hacker input,
+body.theme-hacker select {
+  background-color: #1a1a1a;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+}
+
+body.theme-hacker .progress-bar {
+  background-color: #1a1a1a;
+  border: 1px solid #00ff00;
+}
+
+body.theme-hacker .progress-fill {
+  background-color: #00ff00;
+}
+
+body.theme-hacker .modal {
+  background-color: #0a0a0a;
+  border: 2px solid #00ff00;
+}
+
+body.theme-hacker .section-title {
+  color: #00ff00;
+  border-bottom: 1px solid #00ff00;
+}
+
+/* Plain Theme */
+body.theme-plain {
+  background-color: #ffffff;
+  color: #333333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+}
+
+body.theme-plain .header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+body.theme-plain button {
+  background-color: #ffffff;
+  color: #333333;
+  border: 1px solid #ccc;
+}
+
+body.theme-plain button:hover {
+  background-color: #f0f0f0;
+}
+
+body.theme-plain .card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  color: #333333;
+}
+
+body.theme-plain .card.done {
+  opacity: 0.6;
+  background-color: #f9f9f9;
+}
+
+body.theme-plain input,
+body.theme-plain select {
+  background-color: #ffffff;
+  color: #333333;
+  border: 1px solid #ccc;
+}
+
+body.theme-plain .progress-bar {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+}
+
+body.theme-plain .progress-fill {
+  background-color: #4CAF50;
+}
+
+body.theme-plain .modal {
+  background-color: #ffffff;
+  border: 2px solid #333;
+}
+
+body.theme-plain .section-title {
+  color: #333333;
+  border-bottom: 2px solid #333;
+}
