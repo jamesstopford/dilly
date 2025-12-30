@@ -36,6 +36,15 @@ function loadData() {
       const data = JSON.parse(stored);
       // Ensure all required fields exist (migration safety)
       const defaultData = getDefaultData();
+
+      // Migrate removed themes to 'hacker'
+      const validThemes = ['hacker', 'plain'];
+      const currentTheme = data.settings?.theme || 'hacker';
+      if (!validThemes.includes(currentTheme)) {
+        data.settings = data.settings || {};
+        data.settings.theme = 'hacker';
+      }
+
       return {
         ...defaultData,
         ...data,
