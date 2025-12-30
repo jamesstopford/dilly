@@ -33,7 +33,7 @@ resources/
   dilly.jpg        # Image displayed in Edit Template view
 css/
   style.css        # Main styles
-  themes.css       # 2 theme definitions (Hacker, Plain)
+  themes.css       # 3 theme definitions (Hacker, Plain, Dilly)
 js/
   main.js          # App initialization, routing, event binding
   storage.js       # localStorage load/save helpers
@@ -58,7 +58,7 @@ All data stored in `localStorage` under key `"dilly-data"` as JSON:
     "oneOffItems": [/* array of one-off item objects (id, title, category) - only for today */]
   },
   "settings": {
-    "theme": "hacker" // hacker or plain
+    "theme": "dilly" // hacker, plain, or dilly (default: dilly)
   }
 }
 ```
@@ -70,7 +70,7 @@ All data stored in `localStorage` under key `"dilly-data"` as JSON:
 - **Categories**: 5 seeded (Fitness 💪, Health 🍎, Work 💻, Chore 🧹, Social 👥) + up to 5 custom = max 10 total
 - **Icons**: Unicode emojis only - no external assets
 - **Emoji Picker**: Uses `emoji-picker-element` library for easy emoji selection in category management
-- **Theming**: 2 themes available (Hacker, Plain) - CSS class swap on `<body>` element
+- **Theming**: 3 themes available (Hacker, Plain, Dilly) - CSS class swap on `<body>` element. Default is Dilly theme, which uses color palette extracted from dilly.jpg mascot (pickle greens, golden yellow, cream)
 - **One-Off Tasks**: Items stored in `currentDay.oneOffItems` array, not in template. `getTemplateItemById()` checks both template and oneOffItems
 
 ### Views

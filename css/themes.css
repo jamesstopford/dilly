@@ -196,3 +196,108 @@ body.theme-plain .theme-selector select {
   color: #333333;
   border: 1px solid #ccc;
 }
+
+/* Dilly Theme (based on dilly.jpg pickle mascot) */
+body.theme-dilly {
+  background-color: #e8d7b8;
+  color: #2d5020;
+  font-family: 'Courier New', 'Fira Code', 'Consolas', monospace;
+}
+
+body.theme-dilly .header {
+  background-color: #dcc9a8;
+  border-bottom: 2px solid #6a994e;
+}
+
+body.theme-dilly button {
+  background-color: #f0e4d0;
+  color: #2d5020;
+  border: 2px solid #6a994e;
+  font-weight: 600;
+}
+
+body.theme-dilly button:hover {
+  background-color: #f4d03f;
+  color: #2d5020;
+  border-color: #d4a500;
+}
+
+body.theme-dilly .card {
+  background-color: #f0e4d0;
+  border: 2px solid #6a994e;
+  color: #2d5020;
+}
+
+body.theme-dilly .card.done {
+  opacity: 0.6;
+  background-color: #e8d7b8;
+  border-color: #8ab866;
+}
+
+body.theme-dilly input,
+body.theme-dilly select {
+  background-color: #f0e4d0;
+  color: #2d5020;
+  border: 2px solid #6a994e;
+}
+
+body.theme-dilly .progress-bar {
+  background-color: #dcc9a8;
+  border: 2px solid #6a994e;
+}
+
+body.theme-dilly .progress-fill {
+  background-color: #f4d03f;
+}
+
+body.theme-dilly .progress-text {
+  color: #2d5020;
+  font-weight: 700;
+}
+
+body.theme-dilly .modal {
+  background-color: #e8d7b8;
+  border: 3px solid #f4d03f;
+}
+
+body.theme-dilly .section-title {
+  color: #2d5020;
+  border-bottom: 2px solid #6a994e;
+}
+
+body.theme-dilly .task-menu-popover {
+  background-color: #f0e4d0;
+  border: 2px solid #6a994e;
+}
+
+body.theme-dilly .menu-action-btn {
+  background-color: #f0e4d0;
+  color: #2d5020;
+}
+
+body.theme-dilly .menu-action-btn:hover {
+  background-color: #f4d03f;
+  color: #2d5020;
+}
+
+body.theme-dilly .settings-menu {
+  background-color: #f0e4d0;
+  border: 2px solid #6a994e;
+}
+
+body.theme-dilly .settings-menu-item {
+  background-color: #f0e4d0;
+  color: #2d5020;
+}
+
+body.theme-dilly .settings-menu-item:hover {
+  background-color: #f4d03f;
+  color: #2d5020;
+}
+
+body.theme-dilly .theme-selector select {
+  background-color: #f0e4d0;
+  color: #2d5020;
+  border: 2px solid #6a994e;
+  font-weight: 600;
+}

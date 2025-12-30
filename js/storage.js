@@ -23,7 +23,7 @@ function getDefaultData() {
       oneOffItems: []
     },
     settings: {
-      theme: 'hacker'
+      theme: 'dilly'
     }
   };
 }
@@ -37,12 +37,12 @@ function loadData() {
       // Ensure all required fields exist (migration safety)
       const defaultData = getDefaultData();
 
-      // Migrate removed themes to 'hacker'
-      const validThemes = ['hacker', 'plain'];
-      const currentTheme = data.settings?.theme || 'hacker';
+      // Migrate removed themes to 'dilly'
+      const validThemes = ['hacker', 'plain', 'dilly'];
+      const currentTheme = data.settings?.theme || 'dilly';
       if (!validThemes.includes(currentTheme)) {
         data.settings = data.settings || {};
-        data.settings.theme = 'hacker';
+        data.settings.theme = 'dilly';
       }
 
       return {

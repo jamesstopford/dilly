@@ -93,6 +93,7 @@ function renderSettingsMenu() {
         <select id="settings-theme-select">
           <option value="hacker" ${data.settings.theme === 'hacker' ? 'selected' : ''}>Hacker</option>
           <option value="plain" ${data.settings.theme === 'plain' ? 'selected' : ''}>Plain</option>
+          <option value="dilly" ${data.settings.theme === 'dilly' ? 'selected' : ''}>Dilly</option>
         </select>
       </div>
       <div class="settings-menu-separator"></div>
@@ -114,6 +115,7 @@ function renderSettingsMenu() {
         <select id="settings-theme-select">
           <option value="hacker" ${data.settings.theme === 'hacker' ? 'selected' : ''}>Hacker</option>
           <option value="plain" ${data.settings.theme === 'plain' ? 'selected' : ''}>Plain</option>
+          <option value="dilly" ${data.settings.theme === 'dilly' ? 'selected' : ''}>Dilly</option>
         </select>
       </div>
     `;
