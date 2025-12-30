@@ -3,17 +3,29 @@
 // Render the scorecard
 function renderScorecard(data) {
   const total = data.template.length;
-  const completed = Object.keys(data.currentDay.done).length;
-  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-  const dateDisplay = formatDateString(data.currentDay.dateString);
 
-  const scorecard = document.getElementById('scorecard');
+  // Separate template items from one-off items in done
+  const templateItemIds = new Set(data.template.map(item => item.id));
+  const doneItemIds = Object.keys(data.currentDay.done);
+
+  const templateCompleted = doneItemIds.filter(id => templateItemIds.has(id)).length;
+  const oneOffCompleted = doneItemIds.filter(id => !templateItemIds.has(id)).length;
+
+  const percentage = total > 0 ? Math.round((templateCompleted / total) * 100) : 0;
+
+  // Build the completion text
+  let completionText = `${templateCompleted} / ${total}`;
+  if (oneOffCompleted > 0) {
+    completionText += ` +${oneOffCompleted}`;
+  }
+
+  const scorecard = document.getElementById('header-scorecard');
   scorecard.innerHTML = `
-    <div class="date-indicator">${dateDisplay}</div>
-    <div class="score">${completed} / ${total} completed</div>
-    <div class="percentage">${percentage}%</div>
-    <div class="progress-bar">
-      <div class="progress-fill" style="width: ${percentage}%"></div>
+    <div class="progress-bar-container">
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: ${percentage}%"></div>
+      </div>
+      <div class="progress-text">${completionText}</div>
     </div>
   `;
 }
@@ -23,11 +35,14 @@ function createDailyCard(data, itemId, isDone = false) {
   const item = getTemplateItemById(data, itemId);
   if (!item) return null;
 
+  // Check if this is a one-off item
+  const isOneOff = data.currentDay.oneOffItems?.some(oi => oi.id === itemId);
+
   const category = getCategoryByName(data, item.category);
   const emoji = category ? category.emoji : '📌';
 
   const card = document.createElement('div');
-  card.className = `card ${isDone ? 'done' : ''}`;
+  card.className = `card ${isDone ? 'done' : ''} ${isOneOff ? 'oneoff-card' : ''}`;
   card.dataset.itemId = itemId;
 
   if (!isDone) {
@@ -40,19 +55,46 @@ function createDailyCard(data, itemId, isDone = false) {
     timestampHtml = `<div class="timestamp">${getRelativeTime(timestamp)}</div>`;
   }
 
+  // Build category options for one-off items
+  let categorySelect = '';
+  if (isOneOff && !isDone) {
+    const categoryOptions = data.categories.map(cat => {
+      const selected = cat.name === item.category ? 'selected' : '';
+      return `<option value="${escapeHtml(cat.name)}" ${selected} title="${escapeHtml(cat.name)}">${cat.emoji}</option>`;
+    }).join('');
+    categorySelect = `<select class="oneoff-category-select" data-oneoff-id="${itemId}">${categoryOptions}</select>`;
+  }
+
+  // Title display - editable for one-off pending items
+  let titleContent;
+  if (isOneOff && !isDone) {
+    titleContent = `<input type="text" class="oneoff-title-input" data-oneoff-id="${itemId}" value="${escapeHtml(item.title)}" placeholder="Task name...">`;
+  } else {
+    titleContent = `<div class="title">${escapeHtml(item.title)}</div>`;
+  }
+
+  // Disable Done button if one-off task has no title yet
+  const doneDisabled = isOneOff && !isDone && !item.title ? 'disabled' : '';
+
   const actionButton = isDone
     ? '<button class="undo-btn" data-item-id="' + itemId + '">Undo</button>'
-    : '<button class="done-btn" data-item-id="' + itemId + '">Done</button>';
+    : '<button class="done-btn" data-item-id="' + itemId + '" ' + doneDisabled + '>Done</button>';
+
+  // Add menu icon for both one-off and template tasks (when pending)
+  const menuIcon = !isDone
+    ? '<div class="task-menu-icon" data-item-id="' + itemId + '" data-is-oneoff="' + isOneOff + '">⋮</div>'
+    : '';
 
   card.innerHTML = `
     ${!isDone ? '<div class="drag-handle">☰</div>' : ''}
-    <div class="emoji">${emoji}</div>
+    ${!isDone && isOneOff ? categorySelect : '<div class="emoji">' + emoji + '</div>'}
     <div class="content">
-      <div class="title">${escapeHtml(item.title)}</div>
+      ${titleContent}
       ${timestampHtml}
     </div>
     <div class="actions">
       ${actionButton}
+      ${menuIcon}
     </div>
   `;
 

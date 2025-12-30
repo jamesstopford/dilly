@@ -12,12 +12,25 @@
   <!-- Header -->
   <header class="header">
     <div class="logo">Dilly</div>
+    <div id="header-scorecard" class="header-scorecard">
+      <div class="progress-bar-container">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text">0 / 0 completed</div>
+      </div>
+    </div>
     <button id="daily-btn">Today</button>
     <button id="template-btn">Edit Template</button>
     <button id="reset-btn">Reset Day</button>
     <select id="theme-select">
       <option value="hacker">Theme: Hacker</option>
       <option value="plain">Theme: Plain</option>
+      <option value="tokyo-night">Theme: Tokyo Night</option>
+      <option value="gruvbox">Theme: Gruvbox</option>
+      <option value="nord">Theme: Nord</option>
+      <option value="catppuccin">Theme: Catppuccin</option>
+      <option value="dracula">Theme: Dracula</option>
     </select>
   </header>
 
@@ -26,17 +39,11 @@
 
     <!-- Daily View -->
     <div id="daily-view" class="view active">
-      <!-- Scorecard -->
-      <div id="scorecard" class="scorecard">
-        <div class="score">0 / 0 completed</div>
-        <div class="percentage">0%</div>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: 0%"></div>
-        </div>
-      </div>
-
       <!-- Pending Items -->
-      <h2 class="section-title">To Do</h2>
+      <div class="section-header">
+        <h2 class="section-title">To Do</h2>
+        <button id="add-oneoff-btn" class="add-oneoff-btn">+ One-Off Task</button>
+      </div>
       <div id="pending-items">
         <div class="item-list empty">Loading...</div>
       </div>
@@ -85,6 +92,7 @@
   </div>
 
   <!-- Scripts -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/render.js"></script>

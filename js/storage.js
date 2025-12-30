@@ -19,7 +19,8 @@ function getDefaultData() {
     currentDay: {
       dateString: getTodayString(),
       pending: [],
-      done: {}
+      done: {},
+      oneOffItems: []
     },
     settings: {
       theme: 'hacker'
@@ -34,9 +35,15 @@ function loadData() {
     if (stored) {
       const data = JSON.parse(stored);
       // Ensure all required fields exist (migration safety)
+      const defaultData = getDefaultData();
       return {
-        ...getDefaultData(),
-        ...data
+        ...defaultData,
+        ...data,
+        currentDay: {
+          ...defaultData.currentDay,
+          ...data.currentDay,
+          oneOffItems: data.currentDay?.oneOffItems || []
+        }
       };
     }
   } catch (e) {
@@ -61,9 +68,15 @@ function getCategoryByName(data, categoryName) {
   return data.categories.find(cat => cat.name === categoryName);
 }
 
-// Get template item by ID
+// Get template item by ID (also checks one-off items)
 function getTemplateItemById(data, itemId) {
-  return data.template.find(item => item.id === itemId);
+  // Check template first
+  let item = data.template.find(item => item.id === itemId);
+  // If not found, check one-off items
+  if (!item && data.currentDay.oneOffItems) {
+    item = data.currentDay.oneOffItems.find(item => item.id === itemId);
+  }
+  return item;
 }
 
 // Check if item is done

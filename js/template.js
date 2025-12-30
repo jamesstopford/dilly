@@ -1,13 +1,25 @@
 // Edit Template view logic
 
 // Add a new template item
-function addTemplateItem() {
+function addTemplateItem(categoryName = null) {
   const data = loadData();
+
+  // If no category specified, use the last item's category or first category
+  let category = categoryName;
+  if (!category) {
+    if (data.template.length > 0) {
+      // Use category from last item
+      category = data.template[data.template.length - 1].category;
+    } else {
+      // Use first category if no items exist
+      category = data.categories[0].name;
+    }
+  }
 
   const newItem = {
     id: generateId(),
     title: '',
-    category: data.categories[0].name,
+    category: category,
     order: data.template.length
   };
 
@@ -80,9 +92,7 @@ function attachTemplateEventListeners() {
   document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const itemId = e.target.dataset.itemId;
-      if (confirm('Delete this item?')) {
-        deleteTemplateItem(itemId);
-      }
+      deleteTemplateItem(itemId);
     });
   });
 
@@ -98,7 +108,22 @@ function attachTemplateEventListeners() {
 
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
-        e.target.blur();
+        e.preventDefault();
+
+        // Save current title
+        const itemId = e.target.dataset.itemId;
+        const newTitle = e.target.value.trim();
+        if (newTitle) {
+          updateTemplateItemTitle(itemId, newTitle);
+        }
+
+        // Get current item's category
+        const data = loadData();
+        const currentItem = data.template.find(t => t.id === itemId);
+        const category = currentItem ? currentItem.category : null;
+
+        // Create new item with same category
+        addTemplateItem(category);
       }
     });
   });
@@ -174,6 +199,11 @@ function attachCategoryEventListeners() {
 
   // Emoji inputs
   document.querySelectorAll('.emoji-input').forEach(input => {
+    // Show emoji picker on click
+    input.addEventListener('click', (e) => {
+      showEmojiPicker(e.target);
+    });
+
     input.addEventListener('blur', (e) => {
       const index = parseInt(e.target.dataset.catIndex);
       const newEmoji = e.target.value.trim();
@@ -200,9 +230,7 @@ function attachCategoryEventListeners() {
   document.querySelectorAll('.category-item .delete-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const index = parseInt(e.target.dataset.catIndex);
-      if (confirm('Delete this category? Items using it will keep the category name.')) {
-        deleteCategory(index);
-      }
+      deleteCategory(index);
     });
   });
 }
@@ -250,4 +278,56 @@ function deleteCategory(index) {
 
   renderCategoriesModal();
   attachCategoryEventListeners();
+}
+
+// Show emoji picker for an input
+function showEmojiPicker(inputElement) {
+  // Remove any existing picker
+  const existingPicker = document.querySelector('.emoji-picker-wrapper');
+  if (existingPicker) {
+    existingPicker.remove();
+  }
+
+  // Create picker wrapper
+  const wrapper = document.createElement('div');
+  wrapper.className = 'emoji-picker-wrapper';
+
+  // Create emoji picker element
+  const picker = document.createElement('emoji-picker');
+  wrapper.appendChild(picker);
+
+  // Position near the input
+  const rect = inputElement.getBoundingClientRect();
+  wrapper.style.position = 'fixed';
+  wrapper.style.left = `${rect.left}px`;
+  wrapper.style.top = `${rect.bottom + 5}px`;
+  wrapper.style.zIndex = '2000';
+
+  document.body.appendChild(wrapper);
+
+  // Handle emoji selection
+  picker.addEventListener('emoji-click', (event) => {
+    const emoji = event.detail.emoji.unicode;
+    inputElement.value = emoji;
+
+    // Trigger blur to save
+    const index = parseInt(inputElement.dataset.catIndex);
+    const data = loadData();
+    data.categories[index].emoji = emoji;
+    saveData(data);
+
+    // Remove picker
+    wrapper.remove();
+  });
+
+  // Close picker when clicking outside
+  setTimeout(() => {
+    const closeHandler = (e) => {
+      if (!wrapper.contains(e.target) && e.target !== inputElement) {
+        wrapper.remove();
+        document.removeEventListener('click', closeHandler);
+      }
+    };
+    document.addEventListener('click', closeHandler);
+  }, 0);
 }
