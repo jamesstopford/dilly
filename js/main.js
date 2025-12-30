@@ -32,6 +32,9 @@ function showView(viewName) {
     document.removeEventListener('click', closeTaskMenu);
   }
 
+  // Close settings menu
+  closeSettingsMenu();
+
   // Hide all views
   document.querySelectorAll('.view').forEach(view => {
     view.classList.remove('active');
@@ -60,12 +63,6 @@ function showView(viewName) {
 // Apply theme to body
 function applyTheme(theme) {
   document.body.className = `theme-${theme}`;
-
-  // Update theme selector
-  const themeSelect = document.getElementById('theme-select');
-  if (themeSelect) {
-    themeSelect.value = theme;
-  }
 }
 
 // Change theme
@@ -74,6 +71,123 @@ function changeTheme(newTheme) {
   data.settings.theme = newTheme;
   saveData(data);
   applyTheme(newTheme);
+}
+
+// Render settings menu based on current view
+function renderSettingsMenu() {
+  const data = loadData();
+  const settingsMenu = document.getElementById('settings-menu');
+
+  let menuHTML = '';
+
+  if (currentView === 'daily') {
+    // Daily view: Edit Template, Theme, Reset Day
+    menuHTML = `
+      <button class="settings-menu-item" data-action="edit-template">
+        <span class="menu-icon">📝</span>
+        <span class="menu-label">Edit Template</span>
+      </button>
+      <div class="settings-menu-separator"></div>
+      <div class="theme-selector">
+        <div class="theme-selector-title">THEME</div>
+        <select id="settings-theme-select">
+          <option value="hacker" ${data.settings.theme === 'hacker' ? 'selected' : ''}>Hacker</option>
+          <option value="plain" ${data.settings.theme === 'plain' ? 'selected' : ''}>Plain</option>
+        </select>
+      </div>
+      <div class="settings-menu-separator"></div>
+      <button class="settings-menu-item" data-action="reset-day">
+        <span class="menu-icon">🔄</span>
+        <span class="menu-label">Reset Day</span>
+      </button>
+    `;
+  } else if (currentView === 'template') {
+    // Template view: Back to Today, Theme
+    menuHTML = `
+      <button class="settings-menu-item" data-action="back-to-today">
+        <span class="menu-icon">←</span>
+        <span class="menu-label">Back to Today</span>
+      </button>
+      <div class="settings-menu-separator"></div>
+      <div class="theme-selector">
+        <div class="theme-selector-title">THEME</div>
+        <select id="settings-theme-select">
+          <option value="hacker" ${data.settings.theme === 'hacker' ? 'selected' : ''}>Hacker</option>
+          <option value="plain" ${data.settings.theme === 'plain' ? 'selected' : ''}>Plain</option>
+        </select>
+      </div>
+    `;
+  }
+
+  settingsMenu.innerHTML = menuHTML;
+
+  // Attach event listeners to menu items
+  attachSettingsMenuEventListeners();
+}
+
+// Toggle settings menu
+function toggleSettingsMenu() {
+  const settingsMenu = document.getElementById('settings-menu');
+  const isActive = settingsMenu.classList.contains('active');
+
+  if (isActive) {
+    closeSettingsMenu();
+  } else {
+    // Render menu content based on current view
+    renderSettingsMenu();
+
+    // Show menu
+    settingsMenu.classList.add('active');
+
+    // Close menu when clicking outside
+    setTimeout(() => {
+      document.addEventListener('click', handleSettingsMenuOutsideClick);
+    }, 0);
+  }
+}
+
+// Close settings menu
+function closeSettingsMenu() {
+  const settingsMenu = document.getElementById('settings-menu');
+  settingsMenu.classList.remove('active');
+  document.removeEventListener('click', handleSettingsMenuOutsideClick);
+}
+
+// Handle clicks outside settings menu
+function handleSettingsMenuOutsideClick(e) {
+  const settingsMenu = document.getElementById('settings-menu');
+  const settingsBtn = document.getElementById('settings-btn');
+
+  if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)) {
+    closeSettingsMenu();
+  }
+}
+
+// Attach event listeners to settings menu items
+function attachSettingsMenuEventListeners() {
+  // Action buttons
+  document.querySelectorAll('.settings-menu-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      const action = e.currentTarget.dataset.action;
+
+      if (action === 'edit-template') {
+        showView('template');
+      } else if (action === 'back-to-today') {
+        showView('daily');
+      } else if (action === 'reset-day') {
+        closeSettingsMenu();
+        resetDay();
+      }
+    });
+  });
+
+  // Theme select dropdown
+  const themeSelect = document.getElementById('settings-theme-select');
+  if (themeSelect) {
+    themeSelect.addEventListener('change', (e) => {
+      changeTheme(e.target.value);
+    });
+  }
 }
 
 // Reset the day
@@ -303,21 +417,10 @@ function skipTaskToday(itemId) {
 
 // Attach event listeners to header buttons
 function attachHeaderEventListeners() {
-  // View switchers
-  document.getElementById('daily-btn').addEventListener('click', () => {
-    showView('daily');
-  });
-
-  document.getElementById('template-btn').addEventListener('click', () => {
-    showView('template');
-  });
-
-  // Reset day button
-  document.getElementById('reset-btn').addEventListener('click', resetDay);
-
-  // Theme selector
-  document.getElementById('theme-select').addEventListener('change', (e) => {
-    changeTheme(e.target.value);
+  // Settings button
+  document.getElementById('settings-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleSettingsMenu();
   });
 
   // Add item button (template view)

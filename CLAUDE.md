@@ -75,8 +75,12 @@ All data stored in `localStorage` under key `"dilly-data"` as JSON:
 
 ### Views
 
+**Header**:
+- Dilly logo
+- Progress bar showing X/Y completed (visible in both views)
+- Settings button (⚙️ gear icon) - opens context-aware settings menu
+
 **Daily View** (default):
-- Progress bar in header showing X/Y completed
 - "+ One-Off Task" button to add tasks for today only
 - Pending items section (draggable cards with Done button)
 - Done items section (grayed cards with Undo button and timestamps)
@@ -88,7 +92,15 @@ All data stored in `localStorage` under key `"dilly-data"` as JSON:
 
 ### Important Behaviors
 
-**Daily Reset** (manual only via "Reset Day" button):
+**Settings Menu**:
+- Accessed via gear icon (⚙️) in header
+- Context-aware: shows different options based on current view
+- Daily View menu: Edit Template, Theme dropdown selector, Reset Day
+- Template View menu: Back to Today, Theme dropdown selector
+- Clicking outside menu or switching views closes it automatically
+- Theme changes are instant and saved to localStorage
+
+**Daily Reset** (manual only via "Reset Day" in settings menu):
 - Sets `currentDay.dateString` to today
 - Resets `pending` to full template order
 - Clears `done` map and `oneOffItems` array

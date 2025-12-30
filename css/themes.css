@@ -79,6 +79,27 @@ body.theme-hacker .menu-action-btn:hover {
   color: #0a0a0a;
 }
 
+body.theme-hacker .settings-menu {
+  background-color: #1a1a1a;
+  border: 1px solid #00ff00;
+}
+
+body.theme-hacker .settings-menu-item {
+  background-color: #1a1a1a;
+  color: #00ff00;
+}
+
+body.theme-hacker .settings-menu-item:hover {
+  background-color: #00ff00;
+  color: #0a0a0a;
+}
+
+body.theme-hacker .theme-selector select {
+  background-color: #1a1a1a;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+}
+
 /* Plain Theme */
 body.theme-plain {
   background-color: #ffffff;
@@ -154,4 +175,24 @@ body.theme-plain .menu-action-btn {
 
 body.theme-plain .menu-action-btn:hover {
   background-color: #f0f0f0;
+}
+
+body.theme-plain .settings-menu {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+}
+
+body.theme-plain .settings-menu-item {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+body.theme-plain .settings-menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+body.theme-plain .theme-selector select {
+  background-color: #ffffff;
+  color: #333333;
+  border: 1px solid #ccc;
 }

@@ -35,6 +35,92 @@ body {
   margin-right: auto;
 }
 
+/* Settings Button */
+.settings-btn {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  line-height: 1;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, all 0.2s;
+}
+
+.settings-btn:hover {
+  transform: rotate(90deg);
+}
+
+/* Settings Menu */
+.settings-menu {
+  display: none;
+  position: fixed;
+  top: 70px;
+  right: 1rem;
+  z-index: 1000;
+  border-radius: 8px;
+  padding: 0.5rem;
+  min-width: 200px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.2s ease;
+}
+
+.settings-menu.active {
+  display: block;
+}
+
+.settings-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.settings-menu-item .menu-icon {
+  font-size: 1.2rem;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.settings-menu-item .menu-label {
+  font-weight: 500;
+  flex: 1;
+}
+
+.settings-menu-separator {
+  height: 1px;
+  background: rgba(128, 128, 128, 0.3);
+  margin: 0.25rem 0;
+}
+
+.theme-selector {
+  padding: 0.5rem 1rem;
+}
+
+.theme-selector-title {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.theme-selector select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 /* Buttons */
 button {
   padding: 0.5rem 1rem;
